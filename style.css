@@ -46,7 +46,7 @@ body {
   transition: transform 0.1s ease-out;
 }
 
-/* --- 3. NAVIGATION --- */
+/* --- 3. NAVIGATION & LOGO --- */
 header {
   display: flex;
   justify-content: space-between;
@@ -62,8 +62,26 @@ header {
   border-bottom: 1px solid var(--border);
 }
 
-.logo { font-size: 1.6rem; font-weight: 700; cursor: default; }
-.logo span { color: var(--accent); }
+.logo-svg {
+    display: flex;
+    align-items: center;
+    overflow: visible;
+}
+
+/* GSAP will animate these from opacity 0 */
+.logo-main, .logo-sub {
+    opacity: 0;
+}
+
+/* Hover effect for the letters */
+.logo-main tspan {
+    transition: all 0.3s ease;
+}
+
+.logo-main:hover tspan:first-child {
+    fill: var(--accent);
+    filter: drop-shadow(0 0 8px var(--accent));
+}
 
 nav a {
   text-decoration: none;
