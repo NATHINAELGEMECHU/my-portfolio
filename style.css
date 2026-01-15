@@ -22,6 +22,7 @@
 html { 
   scroll-behavior: smooth; 
   scroll-padding-top: var(--header-height); 
+  overflow-x: hidden; /* Prevents side-scrolling extra space */
 }
 
 body {
@@ -43,10 +44,15 @@ body {
   pointer-events: none;
   transform: translate(-50%, -50%);
   z-index: -1;
-  transition: transform 0.1s ease-out;
+  display: block;
 }
 
-/* --- 3. NAVIGATION & LOGO --- */
+/* Hide glow on mobile to improve performance */
+@media (max-width: 768px) {
+    .cursor-glow { display: none; }
+}
+
+/* --- 3. NAVIGATION --- */
 header {
   display: flex;
   justify-content: space-between;
@@ -62,28 +68,8 @@ header {
   border-bottom: 1px solid var(--border);
 }
 
-/* Updated Responsive Logo Container */
-.logo-svg {
-    display: flex;
-    align-items: center;
-    width: 150px; /* Base width for PC */
-}
-
-.logo-svg svg {
-    width: 100%;
-    height: auto;
-    overflow: visible;
-}
-
-.logo-main, .logo-sub {
-    opacity: 0; /* JS will animate this */
-}
-
-/* Hover interaction */
-.logo-main tspan { transition: 0.3s; }
-.logo-main:hover tspan:first-child {
-    fill: var(--accent);
-}
+.logo { font-size: 1.6rem; font-weight: 700; cursor: default; }
+.logo span { color: var(--accent); }
 
 nav a {
   text-decoration: none;
@@ -116,7 +102,7 @@ nav a:hover, .nav-cta { color: var(--accent); }
   padding: var(--header-height) 10% 0;
 }
 
-.hero h1 { font-size: clamp(2.5rem, 7vw, 5rem); line-height: 1.1; margin: 1rem 0; }
+.hero h1 { font-size: clamp(2.2rem, 7vw, 5rem); line-height: 1.1; margin: 1rem 0; }
 
 .gradient-text {
   background: linear-gradient(90deg, var(--accent), var(--accent-alt));
@@ -133,11 +119,12 @@ nav a:hover, .nav-cta { color: var(--accent); }
   font-size: 0.8rem;
 }
 
+.hero-btns { display: flex; flex-wrap: wrap; gap: 10px; }
+
 .btn {
   display: inline-block;
   padding: 14px 30px;
   margin-top: 15px;
-  margin-right: 15px;
   border-radius: 12px;
   text-decoration: none;
   font-weight: 600;
@@ -146,41 +133,36 @@ nav a:hover, .nav-cta { color: var(--accent); }
 
 .btn.primary { background: var(--accent); color: #000; border: none; }
 .btn.secondary { border: 1px solid var(--border); color: #fff; }
-.btn:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(56, 189, 248, 0.2); }
 
 /* --- 5. ABOUT SECTION --- */
-.section { padding: 100px 10%; }
-.section-title { font-size: 2.5rem; margin-bottom: 3rem; }
+.section { padding: 80px 10%; }
+.section-title { font-size: 2.2rem; margin-bottom: 2rem; }
 
 .about-container {
   display: flex;
   align-items: center;
-  gap: 60px;
+  gap: 40px;
 }
 
-.about-img { flex: 1; position: relative; }
+.about-img { flex: 1; }
 .about-img img {
   width: 100%;
-  max-width: 450px;
+  max-width: 400px;
   border-radius: 24px;
   border: 1px solid var(--border);
-  filter: grayscale(20%);
-  transition: 0.5s;
 }
-
-.about-img:hover img { filter: grayscale(0); transform: scale(1.02); }
 
 .about-text { flex: 1.2; }
 
 .about-stats {
   display: flex;
-  gap: 40px;
-  margin-top: 30px;
+  gap: 30px;
+  margin-top: 20px;
 }
 
 .stat span {
   display: block;
-  font-size: 2.2rem;
+  font-size: 2rem;
   font-weight: 700;
   color: var(--accent);
 }
@@ -188,153 +170,114 @@ nav a:hover, .nav-cta { color: var(--accent); }
 /* --- 6. SKILLS GRID --- */
 .skills-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 15px;
 }
 
 .skill-card {
   background: var(--glass);
   border: 1px solid var(--border);
-  padding: 40px 20px;
+  padding: 30px 15px;
   border-radius: 20px;
   text-align: center;
-  transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-.skill-card:hover {
-  border-color: var(--accent);
-  transform: translateY(-10px);
-  background: rgba(56, 189, 248, 0.05);
-}
+.skill-card i { font-size: 2.5rem; color: var(--accent); margin-bottom: 10px; }
 
-.skill-card i { font-size: 3rem; color: var(--accent); margin-bottom: 15px; }
-
-/* --- 7. PROJECTS BENTO GRID --- */
+/* --- 7. PROJECTS GRID --- */
 .projects-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 25px;
+  gap: 20px;
 }
 
 .project-card {
   position: relative;
-  border-radius: 28px;
+  border-radius: 20px;
   overflow: hidden;
-  height: 380px;
+  height: 300px;
+  background: #0f172a; /* Fallback color if image is missing */
   border: 1px solid var(--border);
-  background: var(--glass);
 }
-
-.project-card.large { grid-row: span 2; height: 100%; }
 
 .project-card img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: 0.8s cubic-bezier(0.2, 1, 0.3, 1);
 }
 
 .overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to top, rgba(2, 6, 23, 0.95) 0%, transparent 80%);
+  background: linear-gradient(to top, rgba(2, 6, 23, 0.9) 0%, transparent 100%);
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  padding: 40px;
-  opacity: 0;
-  transition: 0.5s;
+  padding: 20px;
+  transition: 0.3s;
 }
 
-.project-card:hover .overlay { opacity: 1; }
-.project-card:hover img { transform: scale(1.1); }
+/* On mobile, make the overlay always visible if there is no hover */
+@media (min-width: 993px) {
+    .overlay { opacity: 0; }
+    .project-card:hover .overlay { opacity: 1; }
+}
 
-.overlay span { color: var(--accent); font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
-.overlay h3 { font-size: 1.6rem; margin: 5px 0 15px; }
-.view-link { color: #fff; text-decoration: none; font-size: 0.9rem; font-weight: 500; }
-
-/* --- 8. CONTACT FORM --- */
+/* --- 8. CONTACT --- */
 .contact-container {
     display: grid;
     grid-template-columns: 1fr 1.5fr;
-    gap: 60px;
-    align-items: start;
+    gap: 40px;
 }
 
-.contact-form {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
+.contact-form { display: flex; flex-direction: column; gap: 15px; }
 
 .input-group {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 20px;
+    gap: 15px;
 }
 
-.contact-form input, 
-.contact-form textarea {
+.contact-form input, .contact-form textarea {
     background: var(--glass);
     border: 1px solid var(--border);
-    padding: 18px 20px;
-    border-radius: 12px;
+    padding: 15px;
+    border-radius: 10px;
     color: white;
-    font-size: 0.95rem;
-    outline: none;
-    transition: 0.3s;
 }
 
-.contact-form input:focus, 
-.contact-form textarea:focus {
-    border-color: var(--accent);
-    background: rgba(56, 189, 248, 0.05);
-}
-
-.contact-form button {
-    cursor: pointer;
-    align-self: flex-start;
-}
-
-/* --- 9. FOOTER --- */
-footer {
-  padding: 60px 10%;
-  text-align: center;
-  border-top: 1px solid var(--border);
-}
-
-.social-links { font-size: 2rem; margin: 20px 0; }
-.social-links a { color: var(--text-dim); margin: 0 15px; transition: 0.3s; display: inline-block; }
-.social-links a:hover { color: var(--accent); transform: translateY(-5px); }
-
-/* --- 10. MOBILE RESPONSIVENESS --- */
+/* --- 10. MOBILE FIXES --- */
 @media (max-width: 992px) {
-  .logo-svg { width: 120px; } /* Smaller logo on mobile */
-
-  .about-container, .contact-container { grid-template-columns: 1fr; text-align: center; }
-  .about-container { flex-direction: column; }
-  .about-stats { justify-content: center; }
+  header { padding: 0 5%; }
+  .section { padding: 60px 5%; }
   
+  .about-container, .contact-container { 
+      flex-direction: column; 
+      grid-template-columns: 1fr; 
+      text-align: center; 
+  }
+  
+  .about-stats { justify-content: center; }
+
   nav { display: none; }
   .menu-btn { display: block; }
 
   nav.active {
     display: flex !important;
     flex-direction: column;
-    position: absolute;
+    position: fixed;
     top: var(--header-height);
-    left: 0; width: 100%;
+    left: 0; 
+    width: 100%;
+    height: 100vh;
     background: var(--bg);
     padding: 40px;
-    border-bottom: 1px solid var(--border);
     z-index: 100;
   }
   
-  nav.active a { margin: 15px 0; font-size: 1.2rem; margin-left: 0; }
+  nav.active a { margin: 15px 0; font-size: 1.5rem; }
   
   .projects-grid { grid-template-columns: 1fr; }
-  .project-card.large { height: 380px; }
   .input-group { grid-template-columns: 1fr; }
-  .contact-form button { align-self: stretch; }
-  .social-links { text-align: center !important; }
+  .btn { width: 100%; margin-right: 0; }
 }
