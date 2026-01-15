@@ -1,54 +1,61 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-    // 1. GSAP Logo Animation (Entrance)
-    const tl = gsap.timeline();
+    // --- 1. GSAP Logo Animation ---
+    // Ensure GSAP exists before running
+    if (typeof gsap !== "undefined") {
+        const tl = gsap.timeline();
 
-    tl.from(".logo-main tspan", {
-        duration: 0.8,
-        y: -50,
-        opacity: 0,
-        stagger: 0.1,
-        ease: "bounce.out"
-    });
+        tl.from(".logo-main tspan", {
+            duration: 0.8,
+            y: -50,
+            opacity: 0,
+            stagger: 0.1,
+            ease: "bounce.out"
+        });
 
-    tl.from(".logo-sub", {
-        duration: 1,
-        opacity: 0,
-        y: 20,
-        ease: "power2.out"
-    }, "-=0.5");
+        tl.from(".logo-sub", {
+            duration: 1,
+            opacity: 0,
+            y: 20,
+            ease: "power2.out"
+        }, "-=0.5");
+    }
 
-    // 2. Mouse Tracking Glow Effect
+    // --- 2. Mouse Tracking Glow Effect ---
     const glow = document.querySelector('.cursor-glow');
     window.addEventListener('mousemove', (e) => {
+        // requestAnimationFrame is better for performance
         requestAnimationFrame(() => {
             glow.style.left = `${e.clientX}px`;
             glow.style.top = `${e.clientY}px`;
         });
     });
 
-    // 3. Mobile Menu Toggle Logic
+    // --- 3. Mobile Menu Toggle Logic ---
     const menuBtn = document.getElementById('menuBtn');
     const navMenu = document.getElementById('navMenu');
 
-    menuBtn.addEventListener('click', () => {
-        navMenu.classList.toggle('active');
-        const icon = menuBtn.querySelector('i');
-        icon.classList.toggle('bx-menu-alt-right');
-        icon.classList.toggle('bx-x');
-    });
-
-    document.querySelectorAll('#navMenu a').forEach(link => {
-        link.addEventListener('click', () => {
-            navMenu.classList.remove('active');
+    if (menuBtn && navMenu) {
+        menuBtn.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
             const icon = menuBtn.querySelector('i');
-            if(icon.classList.contains('bx-x')) {
-                icon.classList.replace('bx-x', 'bx-menu-alt-right');
-            }
+            icon.classList.toggle('bx-menu-alt-right');
+            icon.classList.toggle('bx-x');
         });
-    });
 
-    // 4. Scroll Reveal Animations (Intersection Observer)
+        // Close mobile menu when a link is clicked
+        document.querySelectorAll('#navMenu a').forEach(link => {
+            link.addEventListener('click', () => {
+                navMenu.classList.remove('active');
+                const icon = menuBtn.querySelector('i');
+                if(icon && icon.classList.contains('bx-x')) {
+                    icon.classList.replace('bx-x', 'bx-menu-alt-right');
+                }
+            });
+        });
+    }
+
+    // --- 4. Scroll Reveal Animations ---
     const observerOptions = { 
         threshold: 0.15,
         rootMargin: "0px 0px -50px 0px" 
