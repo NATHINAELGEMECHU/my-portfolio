@@ -1,6 +1,24 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-    // 1. Mouse Tracking Glow Effect
+    // 1. GSAP Logo Animation (Entrance)
+    const tl = gsap.timeline();
+
+    tl.from(".logo-main tspan", {
+        duration: 0.8,
+        y: -50,
+        opacity: 0,
+        stagger: 0.1,
+        ease: "bounce.out"
+    });
+
+    tl.from(".logo-sub", {
+        duration: 1,
+        opacity: 0,
+        y: 20,
+        ease: "power2.out"
+    }, "-=0.5");
+
+    // 2. Mouse Tracking Glow Effect
     const glow = document.querySelector('.cursor-glow');
     window.addEventListener('mousemove', (e) => {
         requestAnimationFrame(() => {
@@ -9,19 +27,17 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // 2. Mobile Menu Toggle Logic
+    // 3. Mobile Menu Toggle Logic
     const menuBtn = document.getElementById('menuBtn');
     const navMenu = document.getElementById('navMenu');
 
     menuBtn.addEventListener('click', () => {
         navMenu.classList.toggle('active');
         const icon = menuBtn.querySelector('i');
-        // Swaps icons between Burger and Close 'X'
         icon.classList.toggle('bx-menu-alt-right');
         icon.classList.toggle('bx-x');
     });
 
-    // Close mobile menu automatically when a link is clicked
     document.querySelectorAll('#navMenu a').forEach(link => {
         link.addEventListener('click', () => {
             navMenu.classList.remove('active');
@@ -32,7 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // 3. Scroll Reveal Animations (Intersection Observer)
+    // 4. Scroll Reveal Animations (Intersection Observer)
     const observerOptions = { 
         threshold: 0.15,
         rootMargin: "0px 0px -50px 0px" 
@@ -42,13 +58,11 @@ document.addEventListener('DOMContentLoaded', () => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.classList.add('revealed');
-                // Unobserve after animating to save performance
                 revealOnScroll.unobserve(entry.target);
             }
         });
     }, observerOptions);
 
-    // Select elements to animate on scroll
     const animateElements = document.querySelectorAll('.section, .skill-card, .project-card');
     
     animateElements.forEach(el => {
@@ -58,7 +72,6 @@ document.addEventListener('DOMContentLoaded', () => {
         revealOnScroll.observe(el);
     });
 
-    // Inject the CSS helper class for the revealed state
     const revealStyles = document.createElement('style');
     revealStyles.innerHTML = `.revealed { opacity: 1 !important; transform: translateY(0) !important; }`;
     document.head.appendChild(revealStyles);
