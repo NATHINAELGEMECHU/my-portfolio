@@ -1,6 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-
-    // 1. Mouse Tracking Glow Effect (Desktop Only)
+    // 1. Mouse Glow (Desktop only)
     const glow = document.querySelector('.cursor-glow');
     if (window.innerWidth > 768) {
         window.addEventListener('mousemove', (e) => {
@@ -11,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 2. Mobile Menu Toggle
+    // 2. Mobile Menu
     const menuBtn = document.getElementById('menuBtn');
     const navMenu = document.getElementById('navMenu');
 
@@ -31,28 +30,20 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // 3. Scroll Reveal Animations
-    const observerOptions = { threshold: 0.1 };
-
-    const revealOnScroll = new IntersectionObserver((entries) => {
+    // 3. Scroll Reveal
+    const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                entry.target.classList.add('revealed');
-                revealOnScroll.unobserve(entry.target);
+                entry.target.style.opacity = "1";
+                entry.target.style.transform = "translateY(0)";
             }
         });
-    }, observerOptions);
+    }, { threshold: 0.1 });
 
-    const animateElements = document.querySelectorAll('.section, .skill-card, .project-card');
-    
-    animateElements.forEach(el => {
+    document.querySelectorAll('.section, .project-card').forEach(el => {
         el.style.opacity = "0";
         el.style.transform = "translateY(20px)";
         el.style.transition = "all 0.6s ease-out";
-        revealOnScroll.observe(el);
+        observer.observe(el);
     });
-
-    const revealStyles = document.createElement('style');
-    revealStyles.innerHTML = `.revealed { opacity: 1 !important; transform: translateY(0) !important; }`;
-    document.head.appendChild(revealStyles);
 });
